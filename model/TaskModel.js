@@ -7,13 +7,13 @@ export const TaskModel = DB.define('tasks', {
     allowNull: false
   },
   priority: {
-    type: DataTypes.ENUM('alta', 'media', 'baja'),
+    type: DataTypes.ENUM('Alta', 'Media', 'Baja'),
     allowNull: false
   },
   status: {
-    type: DataTypes.ENUM('pendiente', 'completada'),
+    type: DataTypes.ENUM('Pendiente', 'Completada'),
     allowNull: false,
-    defaultValue: 'pendiente'
+    defaultValue: 'Pendiente'
   },
   creation_date: {
     type: DataTypes.STRING,
