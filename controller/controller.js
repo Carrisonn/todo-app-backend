@@ -12,10 +12,10 @@ export async function getTasks(req, res) {
 }
 
 export async function createTask(req, res) {
-  try {
-    const validations = validateTaskData(req.body, true)
-    if (!validations.isValidData) return res.status(400).json({ errorMessage: data.errorMessage })
+  const validation = validateTaskData(req.body, true)
+  if (!validation.isValidData) return res.status(400).json({ errorMessage: validation.errorMessage })
 
+  try {
     const newTask = await TaskModel.create({ ...req.body })
     res.status(201).json({ newTask, successMessage: 'Tarea creada correctamente' })
   } catch (error) {
@@ -25,10 +25,10 @@ export async function createTask(req, res) {
 }
 
 export async function deleteTask(req, res) {
-  try {
-    const { id } = req.params
-    if (!id) return res.status(400).json({ errorMessage: 'Falta el ID de la tarea' })
+  const { id } = req.params
+  if (!id) return res.status(400).json({ errorMessage: 'Falta el ID de la tarea' })
 
+  try {
     const taskToDelete = await TaskModel.findByPk(id)
     if (!taskToDelete) return res.status(404).json({ errorMessage: 'No se ha podido borrar la tarea o ya ha sido eliminada' })
 
@@ -41,15 +41,15 @@ export async function deleteTask(req, res) {
 }
 
 export async function editTask(req, res) {
-  try {
-    const { id } = req.params
-    const { task, priority, status } = req.body
+  const { id } = req.params
+  const { task, priority, status } = req.body
 
+  try {
     const taskToUpdate = await TaskModel.findByPk(id)
     if (!taskToUpdate) return res.status(404).json({ errorMessage: 'Tarea no encontrada' })
 
     const validation = validateTaskData(req.body)
-    if (!validation.isValidData) return res.status(400).json({ errorMessage: data.errorMessage })
+    if (!validation.isValidData) return res.status(400).json({ errorMessage: validation.errorMessage })
 
     if (task) taskToUpdate.task = task
     if (priority) taskToUpdate.priority = priority
